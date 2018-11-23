@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="views/layui/css/layui.css" media="all">
+    <script src="views/layui/layui.js" charset="utf-8"></script>
+    <script src="statics/js/jquery-3.3.1.min.js"></script>
+</head>
+<style>
+    .layui-form-item {
+        margin-left: -5px;
+    }
+
+    .layui-form-label {
+        width: 70px;
+        margin-left: -15px;
+    }
+
+    .layui-input {
+    }
+
+    .layui-input-inline {
+    }
+
+    .layui-input {
+    }
+
+</style>
+</head>
+<body class="layui-layout-body" onload="getTime()">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">
+            <img src="statics/png/coca-cola.png" style="width: 60%"/>
+        </div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+
+            <span class="layui-nav-bar" style="left: 102px; top: 55px; width: 0px; opacity: 0;"></span></ul>
+        <ul class="layui-nav layui-layout-right" style="margin-right: 0%">
+            <li class="layui-nav-item"><a id="timeShow" href=""></a></li>
+            <li class="layui-nav-item"><a href="">你好，admin，欢迎登陆</a></li>
+            <li class="layui-nav-item"><a href="">退出</a></li>
+            <span class="layui-nav-bar" style="left: 132px; top: 55px; width: 0px; opacity: 0;"></span></ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="http://127.0.0.1:8080/manage" style="text-align: center">系统管理<span
+                            class="layui-nav-more"></span></a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="" style="text-align: right">用户信息管理</a></dd>
+                    </dl>
+                </li>
+                <span class="layui-nav-bar"></span></ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <br><br>
+        <form class="layui-form" action="" style="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">学号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="no" id="no"
+                           placeholder="" autocomplete="off" class="layui-input">
+                </div>
+                <label class="layui-form-label">学生姓名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" id="name"
+                           placeholder="" autocomplete="off" class="layui-input">
+                </div>
+                <label class="layui-form-label">学生状态</label>
+                <div class="layui-input-inline">
+                    <select name="status" id="status">
+                        <option value=""></option>
+                        <option value="启用">启用</option>
+                        <option value="禁用">禁用</option>
+                        <option value="黑名单">黑名单</option>
+                    </select>
+                </div>
+                <label class="layui-form-label">注册渠道</label>
+                <div class="layui-input-inline">
+                    <select name="access" id="access">
+                        <option value=""></option>
+                        <option value="PC端">PC端</option>
+                        <option value="微信公众号端">微信公众号端</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">创建起始</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="date" id="begin"
+                               placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">创建截止</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="date" id="end"
+                               placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div>
+                    <button class="layui-btn layui-btn-normal " id="queryBtn" type="button"
+                            style=" width:80px;margin-left: 50px;margin-right: 20px">查询
+                    </button>
+                    <button class="layui-btn layui-btn-normal " id="cancel" type="button"
+                            href="" style="width:80px">取消
+                    </button>
+                </div>
+            </div>
+
+        </form>
+        <fieldset class="layui-elem-field layui-field-title"
+                  style="margin: 20px">
+        </fieldset>
+        <div style="margin: 20px">
+            <button class="layui-btn layui-btn-sm layui-btn-normal "><i class="layui-icon layui-icon-edit"
+                                                                        style="vertical-align: middle"></i> 更改状态
+            </button>
+            <button class="layui-btn layui-btn-sm layui-btn-normal"><i class="layui-icon layui-icon-refresh"
+                                                                       style="vertical-align: middle"></i> 重置密码
+            </button>
+            <button class="layui-btn layui-btn-sm "><i class="layui-icon layui-icon-add-circle"
+                                                       style="vertical-align: middle"></i> 新建
+            </button>
+        </div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin: 20px;">
+        </fieldset>
+        <table class="layui-table" id="table" style="" lay-skin="line"></table>
+    </div>
+</div>
+</div>
+<script language="javascript" type="text/javascript">
+
+    layui.use('laydate', function () {
+        var form = layui.form
+            , laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#begin'
+        });
+        laydate.render({
+            elem: '#end'
+        });
+    })
+
+    function getNow(s) {
+        return s < 10 ? '0' + s : s;
+    }
+
+    function getTime() {
+        var timeShow = document.getElementById("timeShow")
+        var myDate = new Date();
+        //获取当前年
+        var year = myDate.getFullYear();
+        //获取当前月
+        var month = myDate.getMonth() + 1;
+        //获取当前日
+        var date = myDate.getDate();
+        var h = myDate.getHours();       //获取当前小时数(0-23)
+        var m = myDate.getMinutes();     //获取当前分钟数(0-59)
+        var s = myDate.getSeconds();
+
+        var now = year + '-' + getNow(month) + "-" + getNow(date) + " " + getNow(h) + ':' + getNow(m) + ":" + getNow(s);
+        timeShow.text = now
+    }
+
+    function createTime(data) {
+        var date = new Date(data);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? '0' + m : m;
+        var d = date.getDate();
+        d = d < 10 ? ("0" + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ("0" + h) : h;
+        var M = date.getMinutes();
+        M = M < 10 ? ("0" + M) : M;
+        var str = y + "-" + m + "-" + d + " " + h + ":" + M;
+        return str;
+    }
+
+    $("#queryBtn").on("click", queryMethod)
+
+    allUserUrl = 'allUser'
+    tableAllUrl = 'allUserTable';
+    queryUserUrl = 'queryUser'
+    tableQueryUrl = 'queryUserTable';
+
+    layui.use('table', tableD)
+
+    function tableD() {
+        userTable = layui.table;
+        userTable.render({
+            elem: '#table'
+            , url: tableAllUrl
+            , page: true //开启分页
+            , limit: 4
+            , limits: [4]
+            , parseData: function (result) { //res 即为原始返回的数据
+                return {
+                    "code": result.code,
+                    "msg": result.msg,
+                    "count": result.count,
+                    "data": result.data.content
+                };
+            }
+            //用于对分页请求的参数：page、limit重新设定名称
+            , request: {
+                pageName: 'page' //页码的参数名称，默认：page
+                , limitName: 'limit' //每页数据量的参数名，默认：limit
+            }
+            , response: {
+                statusCode: 200
+                , countName: 'count'
+            }
+            , cols: [[
+                {type: 'checkbox'}
+                , {field: 'no', width: 140, title: '学号', sort: true}
+                , {field: 'name', width: 100, title: '学生姓名', sort: true}
+                , {field: 'collage', width: 100, title: '所属学院', sort: true}
+                , {field: 'branch', width: 100, title: '所属部门', sort: true}
+                , {field: 'major', width: 150, title: '专业名称', sort: true}
+                , {field: 'access', width: 100, title: '注册渠道', sort: true}
+                , {
+                    field: 'ct', width: 150, title: '创建时间', sort: true,
+                    templet: function (row) {
+                        return createTime(row.ct)
+                    }
+                }
+                , {
+                    field: 'ut', width: 150, title: '更新时间', sort: true,
+                    templet: function (row) {
+                        return createTime(row.ut)
+                    }
+                }
+                , {field: 'status', width: 100, title: '学生状态', sort: true}
+                // , {field: 'manage', width: 60, title: '操作'}
+            ]]
+        })
+    }
+
+    function tableQ() {
+        /*   userTable.render({
+               elem: '#table'
+               , url: tableQueryUrl
+                   + '?no=' + inputNo
+                   + '&name=' + inputName
+                   + '&status=' + inputStatus
+                   + '&access=' + inputAccess
+                   + '&beginDate=' + selectBeginDate
+                   + '&endDate=' + selectEndDate
+               , page: true //开启分页
+               , limit: 4
+               , limits: [4]
+               , parseData: function (result) { //res 即为原始返回的数据
+                   return {
+                       "code": result.code,
+                       "msg": result.msg,
+                       "count": result.count,
+                       "data": result.data.content
+                   };
+               }
+               //用于对分页请求的参数：page、limit重新设定名称
+               , request: {
+                   pageName: 'page' //页码的参数名称，默认：page
+                   , limitName: 'limit' //每页数据量的参数名，默认：limit
+               }
+               , response: {
+                   statusCode: 200
+                   , countName: 'count'
+               }
+               , cols: [[
+                   {type: 'checkbox'}
+                   , {field: 'no', width: 140, title: '学号', sort: true}
+                   , {field: 'name', width: 100, title: '学生姓名', sort: true}
+                   , {field: 'collage', width: 100, title: '所属学院', sort: true}
+                   , {field: 'branch', width: 100, title: '所属部门', sort: true}
+                   , {field: 'major', width: 150, title: '专业名称', sort: true}
+                   , {field: 'access', width: 100, title: '注册渠道', sort: true}
+                   , {
+                       field: 'ct', width: 150, title: '创建时间', sort: true,
+                       templet: function (row) {
+                           return createTime(row.ct)
+                       }
+                   }
+                   , {
+                       field: 'ut', width: 150, title: '更新时间', sort: true,
+                       templet: function (row) {
+                           return createTime(row.ut)
+                       }
+                   }
+                   , {field: 'status', width: 100, title: '学生状态', sort: true}
+                   // , {field: 'manage', width: 60, title: '操作'}
+               ]]
+           })*/
+        userTable.reload('table', {
+            url: tableQueryUrl
+            , where: {
+                no: inputNo,
+                name: inputName,
+                status: inputStatus,
+                access: inputAccess,
+                beginDate: selectBeginDate,
+                endDate: selectEndDate
+            } //设定异步数据接口的额外参数
+            , page: {
+                page: 1 //重新从第 1 页开始
+            }
+        });
+    }
+
+    function queryMethod() {
+        inputNo = $("#no").val()
+        inputName = $("#name").val()
+        inputStatus = $("#status").val()
+        inputAccess = $("#access").val()
+        selectBeginDate = $("#begin").val()
+        selectEndDate = $("#end").val()
+        json = {
+            "no": inputNo,
+            "name": inputName,
+            "status": inputStatus,
+            "access": inputAccess
+        }
+        if (selectBeginDate == "" && selectEndDate != "")
+            layui.layer.msg('请输入创建时间☺☺☺')
+        else if (selectBeginDate != "" && selectEndDate == "")
+            layui.layer.msg('请输入截止时间☺☺☺')
+        else {
+            //提交JSON
+            $.ajax({
+                type: "POST",
+                url: queryUserUrl,
+                data: json,
+                dataType: "json",
+                success: function (message) {
+                    console.log(json);
+                    layui.layer.msg("查询成功☺☺☺")
+                    layui.use('table', tableQ)
+                },
+                error: function (message) {
+                    console.log(json);
+                    alert("查询失败")
+                }
+            })
+        }
+
+
+    }
+
+
+    setInterval("getTime()", 1000);//让你的时间每1000s刷新一次
+</script>
+</body>
+</html>

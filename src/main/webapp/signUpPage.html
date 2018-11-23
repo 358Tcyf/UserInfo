@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>用户注册</title>
+    <link rel="stylesheet" href="views/layui/css/layui.css" media="all">
+    <script src="views/layui/layui.js" charset="utf-8"></script>
+    <script src="statics/js/jquery-3.3.1.min.js"></script>
+    <script src="statics/js/signup.js"></script>
+    <style>
+        .layui-form-label {
+            text-align: left;
+            margin-left: 20px;
+            width: 80px;
+            height: 20px;
+            vertical-align: middle
+        }
+
+        .layui-input-block {
+            margin-left: 130px;
+            margin-right: 40px;
+            height: 20px;
+            vertical-align: middle
+        }
+
+        .layui-form-item {
+            height: 20px;
+        }
+
+        .layui-input {
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+<div style="padding: 20px; background-color: #F2F2F2;">
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-card">
+                <div style="min-height:600px;background-color: #F2F2F2;"></div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <center>用户注册</center>
+                </div>
+                <div class="layui-card-body" style="height: 450px">
+                    <center><img src="statics/png/coca-cola.png" style=" margin-top:-20px;width: 50%"/></center>
+                    <form id="form1" class="layui-form" action="">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">学生学号：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="no" id="no" required lay-verify="required"
+                                       placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">学生姓名：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" id="name" required lay-verify="required"
+                                       placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">所属学院：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="collage" id="collage" required lay-verify="required"
+                                       placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">所属部门：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="branch" id="branch" required lay-verify="required"
+                                       placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">专业名称：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="major" id="major" required lay-verify="required"
+                                       placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">登录密码：</label>
+                            <div class="layui-input-block">
+                                <input type="password" name="password" id="password"
+                                       required lay-verify="required"
+                                       placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">确认密码：</label>
+                            <div class="layui-input-block">
+                                <input type="password" id="password2" required lay-verify="required"
+                                       placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                    </form>
+                    <center>
+                        <button id="signup" class="layui-btn layui-btn-fluid" style="margin:20px;width: 80%">
+                            注册
+                        </button>
+                    </center>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-card">
+                <div style="min-height:600px;background-color: #F2F2F2;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    layui.use(['form'], formFunction)
+    No = $("#no")
+    Name = $("#name")
+    Collage = $("#collage")
+    Branch = $("#branch")
+    Major = $("#major")
+    Password = $("#password")
+    Password2 = $("#password2")
+
+    function formFunction() {
+    }
+
+    $("#signup").on("click", validInfo)
+
+    function validInfo() {
+        //验证用户信息是否完全
+        if (No.val() == null || No.val() == "") {
+            alert("请输入学号")
+        }
+        else if (Name.val() == null || Name.val() == "") {
+            alert("请输入姓名")
+        }
+        else if (Collage.val() == null || Collage.val() == "") {
+            alert("请输入所属学院")
+        }
+        else if (Branch.val() == null || Branch.val() == "") {
+            alert("请输入所属部门")
+        } else if (Major.val() == null || Major.val() == "") {
+            alert("请输入专业名称")
+        } else if (Password.val() == null || Password.val() == "") {
+            alert("请输入登录密码")
+        } else if (Password2.val() == null || Password2.val() == "") {
+            alert("请确认密码")
+        } else if (Password.val() != Password2.val()) {
+            alert("两次密码不一致")
+        }
+        else {
+            saveHandler();
+        }
+    }
+
+    /**
+     *
+     * 获取当前时间
+     */
+    function getNow(s) {
+        return s < 10 ? '0' + s : s;
+    }
+
+    function getDate() {
+        var myDate = new Date();
+        return myDate
+    }
+
+    function getTime() {
+        //获取当前年
+        var year = getDate().getFullYear();
+        //获取当前月
+        var month = getDate().getMonth() + 1;
+        //获取当前日
+        var date = getDate().getDate();
+        var h = getDate().getHours();       //获取当前小时数(0-23)
+        var m = getDate().getMinutes();     //获取当前分钟数(0-59)
+        var s = getDate().getSeconds();
+
+        var now = year + '-' + getNow(month) + "-" + getNow(date) + " " + getNow(h) + ':' + getNow(m) + ":" + getNow(s);
+        return now;
+    }
+
+    function saveHandler() {
+        //保存数据，提交用户信息
+        input = $("#form1").serialize()
+        json = {
+            "no": Name.val(),
+            "name": No.val(),
+            "collage": Collage.val(),
+            "branch": Branch.val(),
+            "major": Major.val(),
+            "password": Password.val(),
+            "access": "PC端",
+            "ct": getDate(),
+            "ctStr": getTime(),
+            "ut": getDate(),
+            "utStr": getTime(),
+            "status": "启用"
+        }
+        postJson()
+    }
+
+    function postJson() {
+        //提交JSON
+        $.ajax({
+            type: "POST",
+            url: "insertUser",
+            data: json,
+            dataType: "json",
+            success: function (message) {
+                // console.log(json);
+                // alert(message);
+                alert("注册成功")
+            },
+            error: function (message) {
+                console.log(json);
+                alert("提交失败")
+                // 提交总是失败，不能得到正确的return值
+            }
+        })
+    }
+</script>
+</html>
