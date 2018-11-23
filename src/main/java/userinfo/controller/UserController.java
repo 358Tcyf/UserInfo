@@ -137,7 +137,6 @@ public class UserController {
             count = userService.queryMethod(user).size();
         }
 
-
         DefaultData data = new DefaultData(200, "", count, users);
         String str = JSON.toJSONString(data);
         return str;
