@@ -10,6 +10,7 @@ import userinfo.dao.UserRepository;
 import userinfo.pojo.User;
 import userinfo.service.UserService;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -86,5 +87,13 @@ public class UserServiceImpl implements UserService {
         return repository.findEveryThingPages(no, name, status, access, beginDate, endDate, pageable);
     }
 
+    public List<User> resetPsd(List<User> users) {
+        List<User> userList = new ArrayList<User>();
+        for (User u : users) {
+            repository.updatePsd("12345", u.getNo());
+            userList.add(repository.findByNo(u.getNo()));
+        }
+        return userList;
+    }
 
 }

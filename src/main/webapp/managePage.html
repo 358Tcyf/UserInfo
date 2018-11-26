@@ -8,23 +8,23 @@
     <script src="statics/js/jquery-3.3.1.min.js"></script>
 </head>
 <style>
-    .layui-form-item {
-        margin-left: -5px;
-    }
+     .layui-form-item {
+         margin-left: -5px;
+     }
 
-    .layui-form-label {
-        width: 70px;
-        margin-left: -15px;
-    }
+     .layui-form-label {
+         width: 70px;
+         margin-left: -15px;
+     }
 
-    .layui-input {
-    }
+     .layui-input {
+     }
 
-    .layui-input-inline {
-    }
+     .layui-input-inline {
+     }
 
-    .layui-input {
-    }
+     .layui-input {
+     }
 
 </style>
 </head>
@@ -64,7 +64,7 @@
         <!-- 内容主体区域 -->
         <br><br>
         <form class="layui-form" action="" style="">
-            <div class="layui-form-item">
+            <div class="layui-form-item layui-inline">
                 <label class="layui-form-label">学号</label>
                 <div class="layui-input-inline">
                     <input type="text" name="no" id="no"
@@ -94,22 +94,18 @@
                 </div>
             </div>
 
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">创建起始</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="date" id="begin"
-                               placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
-                    </div>
+            <div class="layui-form-item layui-inline">
+                <label class="layui-form-label">创建起始</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="date" id="begin"
+                           placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                </div>
+                <label class="layui-form-label">创建截止</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="date" id="end"
+                           placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">创建截止</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="date" id="end"
-                               placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div>
                     <button class="layui-btn layui-btn-normal " id="queryBtn" type="button"
                             style=" width:80px;margin-left: 50px;margin-right: 20px">查询
                     </button>
@@ -127,8 +123,9 @@
             <button class="layui-btn layui-btn-sm layui-btn-normal "><i class="layui-icon layui-icon-edit"
                                                                         style="vertical-align: middle"></i> 更改状态
             </button>
-            <button class="layui-btn layui-btn-sm layui-btn-normal"><i class="layui-icon layui-icon-refresh"
-                                                                       style="vertical-align: middle"></i> 重置密码
+            <button id="resetPsd" class="layui-btn layui-btn-sm layui-btn-normal"><i
+                    class="layui-icon layui-icon-refresh"
+                    style="vertical-align: middle"></i> 重置密码
             </button>
             <button class="layui-btn layui-btn-sm "><i class="layui-icon layui-icon-add-circle"
                                                        style="vertical-align: middle"></i> 新建
@@ -136,7 +133,7 @@
         </div>
         <fieldset class="layui-elem-field layui-field-title" style="margin: 20px;">
         </fieldset>
-        <table class="layui-table" id="table" style="" lay-skin="line"></table>
+        <table class="layui-table" id="table" style="" lay-skin="line" lay-filter="demo"></table>
     </div>
 </div>
 </div>
@@ -154,6 +151,7 @@
             elem: '#end'
         });
     })
+    layui.use('table', tableD)
 
     function getNow(s) {
         return s < 10 ? '0' + s : s;
@@ -192,13 +190,14 @@
     }
 
     $("#queryBtn").on("click", queryMethod)
+    $("#resetPsd").on("click", resetPassword)
 
     allUserUrl = 'allUser'
     tableAllUrl = 'allUserTable';
     queryUserUrl = 'queryUser'
     tableQueryUrl = 'queryUserTable';
+    resetPsdUrl = 'resetPsd'
 
-    layui.use('table', tableD)
 
     function tableD() {
         userTable = layui.table;
@@ -252,59 +251,6 @@
     }
 
     function tableQ() {
-        /*   userTable.render({
-               elem: '#table'
-               , url: tableQueryUrl
-                   + '?no=' + inputNo
-                   + '&name=' + inputName
-                   + '&status=' + inputStatus
-                   + '&access=' + inputAccess
-                   + '&beginDate=' + selectBeginDate
-                   + '&endDate=' + selectEndDate
-               , page: true //开启分页
-               , limit: 4
-               , limits: [4]
-               , parseData: function (result) { //res 即为原始返回的数据
-                   return {
-                       "code": result.code,
-                       "msg": result.msg,
-                       "count": result.count,
-                       "data": result.data.content
-                   };
-               }
-               //用于对分页请求的参数：page、limit重新设定名称
-               , request: {
-                   pageName: 'page' //页码的参数名称，默认：page
-                   , limitName: 'limit' //每页数据量的参数名，默认：limit
-               }
-               , response: {
-                   statusCode: 200
-                   , countName: 'count'
-               }
-               , cols: [[
-                   {type: 'checkbox'}
-                   , {field: 'no', width: 140, title: '学号', sort: true}
-                   , {field: 'name', width: 100, title: '学生姓名', sort: true}
-                   , {field: 'collage', width: 100, title: '所属学院', sort: true}
-                   , {field: 'branch', width: 100, title: '所属部门', sort: true}
-                   , {field: 'major', width: 150, title: '专业名称', sort: true}
-                   , {field: 'access', width: 100, title: '注册渠道', sort: true}
-                   , {
-                       field: 'ct', width: 150, title: '创建时间', sort: true,
-                       templet: function (row) {
-                           return createTime(row.ct)
-                       }
-                   }
-                   , {
-                       field: 'ut', width: 150, title: '更新时间', sort: true,
-                       templet: function (row) {
-                           return createTime(row.ut)
-                       }
-                   }
-                   , {field: 'status', width: 100, title: '学生状态', sort: true}
-                   // , {field: 'manage', width: 60, title: '操作'}
-               ]]
-           })*/
         userTable.reload('table', {
             url: tableQueryUrl
             , where: {
@@ -318,6 +264,11 @@
             , page: {
                 page: 1 //重新从第 1 页开始
             }
+        });
+    }
+
+    function tableR() {
+        userTable.on('checkbox(demo)', function (obj) {
         });
     }
 
@@ -346,20 +297,46 @@
                 data: json,
                 dataType: "json",
                 success: function (message) {
-                    console.log(json);
-                    layui.layer.msg("查询成功☺☺☺")
+                    layui.layer.alert("查询成功☺☺☺")
                     layui.use('table', tableQ)
                 },
                 error: function (message) {
-                    console.log(json);
-                    alert("查询失败")
+                    console.log(message);
+                    layui.layer.alert("查询失败")
                 }
             })
         }
-
-
     }
 
+
+    function resetPassword() {
+        layui.use('table', tableR)
+        checkStatus = userTable.checkStatus('table')
+        users = checkStatus.data;
+        var userList = {}
+        var nos = []
+        for (var i = 0; i < users.length; i++) {
+            nos.push(users[i].no)
+        }
+        userList.nos = nos
+        var json = {
+            "userList": userList
+        }
+        $.ajax({
+            type: "POST",
+            url: resetPsdUrl,
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(json),
+            dataType: "json",
+            success: function (message) {
+                layui.layer.alert("重置成功☺☺☺")
+            },
+            error: function (message) {
+                layui.layer.alert("重置失败😭😭😭")
+            }
+        })
+
+    }
 
     setInterval("getTime()", 1000);//让你的时间每1000s刷新一次
 </script>

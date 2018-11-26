@@ -32,4 +32,5 @@ public interface UserService {
 
     public Page<User> queryEveryThingPages(User user, Date beginDate, Date endDate, int page, int limit);
 
+    public  List<User> resetPsd(List<User> users);
 }

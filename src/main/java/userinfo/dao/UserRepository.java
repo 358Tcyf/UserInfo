@@ -35,4 +35,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query(value = "select u from User u where u.no like %?1% and u.name like %?2% and u.status like %?3% and u.access like %?4% and u.ct between ?5 and ?6 ORDER BY ?#{#pageable}")
     public Page<User> findEveryThingPages(String no, String name, String status, String access, Date beginDate, Date endDate, Pageable pageable);
+
+    @Query(value = "update User as u set u.password = ?1 where u.no = ?2")
+    public void updatePsd(String password, String no);
+
 }

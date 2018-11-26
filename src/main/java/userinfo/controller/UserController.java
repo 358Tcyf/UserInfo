@@ -3,41 +3,36 @@ package userinfo.controller;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import userinfo.pojo.DefaultData;
 import userinfo.pojo.User;
+import userinfo.pojo.UserList;
 import userinfo.service.impl.UserServiceImpl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @author Simple
  * @date on 2018/11/18 3:13
  */
 @RestController
+@RequestMapping(produces = "text/html;charset=utf-8")
 public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
 
-    @RequestMapping(value = "insertUser", method = {RequestMethod.POST}, produces = "text/html;charset=utf-8")
+    @RequestMapping(value = "insertUser", method = {RequestMethod.POST})
     @ResponseBody
     public String insertUser(User user) {
         userService.userSignUp(user);
         String json = JSON.toJSONString(user);
-        System.out.println(json);
         return json;
     }
 
-    @RequestMapping(value = "insertOne", produces = "text/html;charset=utf-8")
+    @RequestMapping(value = "insertOne")
     public String insertOne() {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
@@ -61,16 +56,14 @@ public class UserController {
         userOne.setUtStr(dateNowStr);
         userService.userSignUp(userOne);
         String str = JSON.toJSONString(userOne);
-        System.out.println(str);
         return str;
     }
 
-    @RequestMapping(value = "checkPsd", method = {RequestMethod.POST}, produces = "text/html;charset=utf-8")
+    @RequestMapping(value = "checkPsd", method = {RequestMethod.POST})
     @ResponseBody
     public String checkPsd(User user) {
         String json = JSON.toJSONString(user);
         User checkUser = userService.findByNo(user);
-        System.out.println(checkUser);
         if (user.getPassword().equals(checkUser.getPassword())) {
             return json;
         } else {
@@ -80,35 +73,31 @@ public class UserController {
 
     @RequestMapping(value = "allUser")
     public String allUser() {
-
         List<User> users = userService.findAll();
         String str = JSON.toJSONString(users); // List转json
         return str;
     }
 
-    @RequestMapping(value = "allUserTable", produces = "text/html;charset=utf-8")
+    @RequestMapping(value = "allUserTable")
     public String userTable(int page, int limit) {
         Page<User> users = userService.findByPage(page, limit);
         int count = userService.findAll().size();
         DefaultData data = new DefaultData(200, "", count, users);
         String str = JSON.toJSONString(data);
-//        System.out.println(str);
         return str;
     }
 
 
-    @RequestMapping(value = "queryUser", method = {RequestMethod.POST}, produces = "text/html;charset=utf-8")
+    @RequestMapping(value = "queryUser", method = {RequestMethod.POST})
     @ResponseBody
     public String queryMethod(User user) {
         String json = JSON.toJSONString(user);
-        System.out.println(json);
         List<User> queryUser = userService.queryMethod(user);
         String str = JSON.toJSONString(queryUser); // List转json
-        System.out.println(str);
         return str;
     }
 
-    @RequestMapping(value = "queryUserTable", produces = "text/html;charset=utf-8")
+    @RequestMapping(value = "queryUserTable")
     @ResponseBody
     public String queryTableTest(String no, String name,
                                  String status, String access,
@@ -139,6 +128,18 @@ public class UserController {
 
         DefaultData data = new DefaultData(200, "", count, users);
         String str = JSON.toJSONString(data);
+        return str;
+    }
+
+    @RequestMapping(value = "resetPsd", method = {RequestMethod.POST})
+    @ResponseBody
+    public String resetPsd(UserList userList) {
+//        String json = JSON.toJSONString(userList);
+        System.out.println(userList.toString());
+//        List<User> uu = userService.resetPsd(users.getUsers());
+//        String json = JSON.toJSONString(userList);
+        List<User> users = userService.findAll();
+        String str = JSON.toJSONString(users); // List转json
         return str;
     }
 
